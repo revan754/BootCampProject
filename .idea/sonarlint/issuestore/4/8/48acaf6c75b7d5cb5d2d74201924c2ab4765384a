@@ -1,0 +1,17 @@
+
+k
+java:S1128"NRemove this unused import 'com.example.bootcampproject.service.RestInterface'.(Ø»¢“8À‚«ž“0
+t
+java:S3776Q"RRefactor this method to reduce its Cognitive Complexity from 24 to the 15 allowed.(ÀÃ¯ÿúÿÿÿÿ8À‚«ž“0
+Z
+java:S1128"8Remove this unused import 'com.google.gson.GsonBuilder'.(”«à¬ÿÿÿÿÿ8ˆÄ¸Ÿ“0
+^
+java:S1128"<Remove this unused import 'android.content.DialogInterface'.(Š­›¨þÿÿÿÿ8ÌÞ¹Ÿ“0
+l
+java:S1128%"JRemove this unused import 'retrofit2.converter.gson.GsonConverterFactory'.(ì§¤¹ÿÿÿÿÿ8ˆÄ¸Ÿ“0
+E
+java:S1185+"(Remove this method to simply inherit it.(ßìê¯8ú¬«ž“0
+L
+java:S1128$"/Remove this unused import 'retrofit2.Retrofit'.(ŠÐÝ8ˆÄ¸Ÿ“0
+N
+java:S1128"1Remove this unused import 'com.google.gson.Gson'.(–§8ˆÄ¸Ÿ“0
