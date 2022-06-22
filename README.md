@@ -33,3 +33,9 @@
 
 # Navigation Görünümü 
 ![navigation_](https://user-images.githubusercontent.com/64421235/175114153-73ef6945-dc5c-4f36-b6f3-bd3424488c82.png)
+
+# HomeFragment verileri çektikten sonra
+![home_activity (2)](https://user-images.githubusercontent.com/64421235/175119054-e2e268be-9725-4dfd-ab70-c686d2668ba0.png)
+
+
+
