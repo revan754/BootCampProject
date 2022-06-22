@@ -3,6 +3,7 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/revan.ali/AndroidStudioProjects/BootCampProject/app/src/main/res/drawable-v24/edittext_background.xml" value="0.1125" />
         <entry key="..\:/Users/revan.ali/AndroidStudioProjects/BootCampProject/app/src/main/res/drawable-v24/email_verktor_24.xml" value="0.1875" />
         <entry key="..\:/Users/revan.ali/AndroidStudioProjects/BootCampProject/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.11200000000000002" />
         <entry key="..\:/Users/revan.ali/AndroidStudioProjects/BootCampProject/app/src/main/res/drawable/edittext_email.xml" value="0.1845" />
@@ -19,8 +20,8 @@
         <entry key="..\:/Users/revan.ali/AndroidStudioProjects/BootCampProject/app/src/main/res/font/roboto_thin.xml" value="0.27239583333333334" />
         <entry key="..\:/Users/revan.ali/AndroidStudioProjects/BootCampProject/app/src/main/res/layout/activity_main.xml" value="0.2421875" />
         <entry key="..\:/Users/revan.ali/AndroidStudioProjects/BootCampProject/app/src/main/res/layout/fragment_forget_password.xml" value="0.2" />
-        <entry key="..\:/Users/revan.ali/AndroidStudioProjects/BootCampProject/app/src/main/res/layout/fragment_home.xml" value="0.12" />
-        <entry key="..\:/Users/revan.ali/AndroidStudioProjects/BootCampProject/app/src/main/res/layout/fragment_login.xml" value="0.1" />
+        <entry key="..\:/Users/revan.ali/AndroidStudioProjects/BootCampProject/app/src/main/res/layout/fragment_home.xml" value="0.264" />
+        <entry key="..\:/Users/revan.ali/AndroidStudioProjects/BootCampProject/app/src/main/res/layout/fragment_login.xml" value="0.2" />
       </map>
     </option>
   </component>

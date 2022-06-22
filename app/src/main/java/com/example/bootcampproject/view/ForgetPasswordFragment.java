@@ -1,5 +1,6 @@
 package com.example.bootcampproject.view;
 
+import static com.example.bootcampproject.view.MainActivity.showToast;
 import android.os.Bundle;
 
 import androidx.activity.OnBackPressedCallback;
@@ -8,15 +9,13 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
+import android.util.Patterns;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.example.bootcampproject.R;
 import com.example.bootcampproject.databinding.FragmentForgetPasswordBinding;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 
 
@@ -44,16 +43,15 @@ public class ForgetPasswordFragment extends Fragment {
         binding.loginHereButton.setOnClickListener(view12 -> Navigation.findNavController(view12).navigate(R.id.action_forgetPasswordFragment_to_loginFragment));
 
         binding.resetButton.setOnClickListener(view1 -> {
-            if (binding.editEmail.getText().toString().isEmpty())
-                Toast.makeText(getContext(), "Lütfen Email Adresinizi Giriniz!", Toast.LENGTH_LONG).show();
-            else {
+            // Geçerli bir email adresi girilip girilmediğini kontrol et
+            if (checkEmail(binding.editEmail.getText().toString())) {
                 FirebaseAuth.getInstance().sendPasswordResetEmail(binding.editEmail.getText().toString())
                         .addOnCompleteListener(task -> {
                             if (task.isSuccessful()) {
-                                Toast.makeText(getContext(), "şifre resetleme linki atıldı", Toast.LENGTH_LONG).show();
+                                showToast(getContext(), "Mail'inize Şifre Yenileme Linki Gönderildi");
                                 Navigation.findNavController(view1).navigate(R.id.action_forgetPasswordFragment_to_loginFragment);
                             } else {
-                                Toast.makeText(getContext(), task.getException().getLocalizedMessage(), Toast.LENGTH_LONG).show();
+                                showToast(getContext(), task.getException().getLocalizedMessage());
                             }
                         });
             }
@@ -67,4 +65,14 @@ public class ForgetPasswordFragment extends Fragment {
         };
         requireActivity().getOnBackPressedDispatcher().addCallback(requireActivity(), callback);
     }
+
+    public boolean checkEmail(String emailInput) {
+        if (!emailInput.isEmpty() && Patterns.EMAIL_ADDRESS.matcher(emailInput).matches()) {
+            return true;
+        } else {
+            showToast(getContext(), "Lütfen Geçerli Bir Email Adresi Giriniz!");
+            return false;
+        }
+    }
+
 }

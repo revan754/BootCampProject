@@ -1,6 +1,8 @@
 package com.example.bootcampproject.view;
 
-import android.app.ProgressDialog;
+import static com.example.bootcampproject.view.MainActivity.dismissProgress;
+import static com.example.bootcampproject.view.MainActivity.showProgress;
+import static com.example.bootcampproject.view.MainActivity.showToast;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -14,7 +16,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.example.bootcampproject.R;
 import com.example.bootcampproject.databinding.FragmentLoginBinding;
@@ -49,19 +50,17 @@ public class LoginFragment extends Fragment {
     public FirebaseAuth auth;
     private GoogleSignInClient mGoogleSignInClient;
     public View view1;
-    public ProgressDialog pd;
     CallbackManager mCallbackManager;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        pd = new ProgressDialog(getContext());
         // google entegrasyonu
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))
                 .requestEmail()
                 .build();
-        mGoogleSignInClient = GoogleSignIn.getClient(getContext(), gso);
+        mGoogleSignInClient = GoogleSignIn.getClient(requireContext(), gso);
 
         auth = FirebaseAuth.getInstance();
 
@@ -78,13 +77,13 @@ public class LoginFragment extends Fragment {
                     @Override
                     public void onCancel() {
                         Log.w("TAG", "onCancel FacebookCallback: ");
-                        Toast.makeText(getContext(), "Bir hata oluştu ", Toast.LENGTH_LONG).show();
+                        showToast(getContext(), "Bir hata oluştu: ");
                     }
 
                     @Override
                     public void onError(FacebookException exception) {
                         Log.w("TAG", "onError FacebookCallback: " + exception.getLocalizedMessage());
-                        Toast.makeText(getContext(), "bir hata oluştu: " + exception.getMessage(), Toast.LENGTH_LONG).show();
+                        showToast(getContext(), "Bir hata oluştu: " + exception.getMessage());
                     }
                 });
 
@@ -122,13 +121,13 @@ public class LoginFragment extends Fragment {
                 @Override
                 public void onCancel() {
                     Log.w("TAG", "onCancel registerCallback: ");
-                    Toast.makeText(getContext(), "Bir hata oluştu: ", Toast.LENGTH_LONG).show();
+                    showToast(getContext(), "Bir hata oluştu: ");
                 }
 
                 @Override
                 public void onError(FacebookException error) {
                     Log.w("TAG", "onError registerCallback: " + error.getLocalizedMessage());
-                    Toast.makeText(getContext(), "Bir hata oluştu: " + error.getLocalizedMessage(), Toast.LENGTH_LONG).show();
+                    showToast(getContext(), "Bir hata oluştu: " + error.getLocalizedMessage());
                 }
             });
         });
@@ -138,7 +137,7 @@ public class LoginFragment extends Fragment {
         binding.loginButton.setOnClickListener(view23 -> {
 
             if (binding.edittextPassword.getText().toString().isEmpty() || binding.editTextEmail.getText().toString().isEmpty()) {
-                Toast.makeText(getContext(), "Lütfen email ve şifrenizi giriniz!", Toast.LENGTH_LONG).show();
+                showToast(getContext(), "Lütfen email ve şifrenizi giriniz!");
             } else {
                 auth.signInWithEmailAndPassword(binding.editTextEmail.getText().toString(), binding.edittextPassword.getText().toString()).addOnSuccessListener(new OnSuccessListener<AuthResult>() {
                     @Override
@@ -151,7 +150,7 @@ public class LoginFragment extends Fragment {
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         Log.w("TAG", "onFailure signInWithEmailAndPassword: " + e.getLocalizedMessage());
-                        Toast.makeText(getContext(), e.getLocalizedMessage(), Toast.LENGTH_LONG).show();
+                        showToast(getContext(), e.getLocalizedMessage());
 
                     }
                 });
@@ -185,8 +184,8 @@ public class LoginFragment extends Fragment {
             } catch (ApiException e) {
                 // Google Sign In failed
                 Log.w("TAG", "GoogleSignIn: " + e.getLocalizedMessage());
-                Toast.makeText(getContext(), "Login olunurken bir hata oluştu :" + e
-                        .getLocalizedMessage(), Toast.LENGTH_LONG).show();
+                showToast(getContext(),"Login olunurken bir hata oluştu :" + e
+                        .getLocalizedMessage());
                 Log.w("TAG", "Google sign in failed", e);
             }
         }
@@ -194,7 +193,7 @@ public class LoginFragment extends Fragment {
 
 
     private void firebaseAuthWithGoogle(String idToken) {
-        showProgress("Lütfen Bekleyiniz");
+        showProgress();
         AuthCredential credential = GoogleAuthProvider.getCredential(idToken, null);
         auth.signInWithCredential(credential)
                 .addOnSuccessListener(authResult -> {
@@ -202,10 +201,10 @@ public class LoginFragment extends Fragment {
                     Bundle bundle = new Bundle();
                     bundle.putString("email", Objects.requireNonNull(authResult.getUser()).getEmail());
                     Navigation.findNavController(view1).navigate(R.id.action_loginFragment_to_homeFragment, bundle);
-                    pd.dismiss();
+                    dismissProgress();
                 }).addOnFailureListener(e -> {
                     Log.w("TAG", "onFailure firebaseAuthWithGoogle");
-                    Toast.makeText(getContext(), "bir hata oluştu : " + e.getLocalizedMessage(), Toast.LENGTH_LONG).show();
+                    showToast(getContext(), "bir hata oluştu : " + e.getLocalizedMessage());
                 });
     }
 
@@ -225,13 +224,8 @@ public class LoginFragment extends Fragment {
             }
         }).addOnFailureListener(e -> {
             Log.w("TAG", "onFailure handleFacebookAccessToken: ", e);
-            Toast.makeText(getContext(), "Bir hata oluştu: " + e.getLocalizedMessage(), Toast.LENGTH_LONG).show();
+            showToast(getContext(), "Bir hata oluştu: " + e.getLocalizedMessage());
         });
-    }
-
-    public void showProgress(String message) {
-        pd.setMessage(message);
-        pd.show();
     }
 
 }

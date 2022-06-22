@@ -1,4 +1,6 @@
-package com.example.bootcampproject.service;
+package com.example.bootcampproject.retrofit;
+
+import com.example.bootcampproject.service.BaseService;
 
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -6,13 +8,13 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class API {
 
     private static API instance = null;
-    private RestInterface myApi;
+    private final BaseService myApi;
 
     private API() {
         Retrofit retrofit = new Retrofit.Builder().baseUrl("https://api.minerstat.com/v2/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
-        myApi = retrofit.create(RestInterface.class);
+        myApi = retrofit.create(BaseService.class);
     }
 
     public static synchronized API getInstance() {
@@ -22,7 +24,7 @@ public class API {
         return instance;
     }
 
-    public RestInterface getMyApi() {
+    public BaseService getMyApi() {
         return myApi;
     }
 }

@@ -6,12 +6,10 @@ import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
-import retrofit2.http.Path;
-import retrofit2.http.Query;
 
 
-public interface RestInterface {
+public interface BaseService {
 
-    @GET("coins?list=ETH,TNB,BTC,ENG")
+    @GET("coins?list=ETH,ANTPOOL BTC,BTC,2MINERS ETH")
     Call<List<CoinsModel>> getCoins();
 }

@@ -1,8 +1,11 @@
 package com.example.bootcampproject.view;
 
+import static com.example.bootcampproject.view.MainActivity.dismissProgress;
+import static com.example.bootcampproject.view.MainActivity.showProgress;
+import static com.example.bootcampproject.view.MainActivity.showToast;
+
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.os.Bundle;
 
 import androidx.activity.OnBackPressedCallback;
@@ -15,33 +18,31 @@ import androidx.navigation.Navigation;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.example.bootcampproject.R;
 import com.example.bootcampproject.databinding.FragmentHomeBinding;
 import com.example.bootcampproject.model.CoinsModel;
-import com.example.bootcampproject.service.API;
-import com.example.bootcampproject.service.RestInterface;
+import com.example.bootcampproject.retrofit.API;
 import com.facebook.login.LoginManager;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 
+import java.text.DecimalFormat;
 import java.util.List;
 import java.util.Objects;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 
 public class HomeFragment extends Fragment {
     FragmentHomeBinding binding;
+    DecimalFormat formatter = new DecimalFormat("##.##");
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        showProgress();
     }
 
     @Override
@@ -54,18 +55,18 @@ public class HomeFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        getData();
+        getCoins();
         OnBackPressedCallback callback = new OnBackPressedCallback(true /* enabled by default */) {
             @Override
             public void handleOnBackPressed() {
-                gotoLogin(view);
+                logout(view);
             }
         };
         requireActivity().getOnBackPressedDispatcher().addCallback(requireActivity(), callback);
 
     }
 
-    private void gotoLogin(View view) {
+    private void logout(View view) {
         new AlertDialog.Builder(requireContext1())
                 .setTitle("Uyarı")
                 .setMessage("Uygulamadan çıkmak istediğinizden emin misiniz?")
@@ -78,49 +79,61 @@ public class HomeFragment extends Fragment {
                 .setNegativeButton("Iptal", null)
                 .show();
     }
-    private void getData() {
+
+    private void getCoins() {
 
         Call<List<CoinsModel>> call = API.getInstance().getMyApi().getCoins();
         call.enqueue(new Callback<List<CoinsModel>>() {
             @SuppressLint("SetTextI18n")
             @Override
             public void onResponse(Call<List<CoinsModel>> call, Response<List<CoinsModel>> response) {
-
-                System.out.println("resp" + response.body());
                 if (response.isSuccessful()) {
+                    String price = "" , coin_name = "";
+                    System.out.println("resp" + response.body());
                     int i = response.body() != null ? response.body().size() : 0;
                     while (i > 0) {
-                        if (Objects.equals(response.body().get(i - 1).coin, "ETH")) {
-                            binding.ethPrice.setText(String.valueOf(response.body().get(i - 1).price));
-                            binding.ethPrice1.setText(String.valueOf(response.body().get(i - 1).price));
-                            binding.ethName.setText(response.body().get(i - 1).coin + " - " + response.body().get(i - 1).name);
+                        price = getFormatedPrice(response.body().get(i - 1).getPrice());
+                        coin_name = response.body().get(i - 1).getCoin() + " - " + response.body().get(i - 1).getName();
+                        if (Objects.equals(response.body().get(i - 1).getCoin(), "ETH")) {
+                            binding.ethPrice.setText(price);
+                            binding.ethPrice1.setText(price);
+                            binding.ethName.setText(coin_name);
                         }
-                        if (Objects.equals(response.body().get(i - 1).coin, "BTC")) {
-                            binding.btcPrice.setText(String.valueOf(response.body().get(i - 1).price));
-                            binding.btcPrice1.setText(String.valueOf(response.body().get(i - 1).price));
-                            binding.btcName.setText(response.body().get(i - 1).coin + " - " + response.body().get(i - 1).name);
+                        if (Objects.equals(response.body().get(i - 1).getCoin(), "2MINERS ETH")) {
+                            binding.btcPrice.setText(price);
+                            binding.btcPrice1.setText(price);
+                            binding.btcName.setText(coin_name);
                         }
-                        if (Objects.equals(response.body().get(i - 1).coin, "TNB")) {
-                            binding.tnbPrice.setText(String.valueOf(response.body().get(i - 1).price));
-                            binding.tnbPrice1.setText(String.valueOf(response.body().get(i - 1).price));
-                            binding.tnbName.setText(response.body().get(i - 1).coin + " - " + response.body().get(i - 1).name);
+                        if (Objects.equals(response.body().get(i - 1).getCoin(), "BTC")) {
+                            binding.tnbPrice.setText(price);
+                            binding.tnbPrice1.setText(price);
+                            binding.tnbName.setText(coin_name);
                         }
-                        if (Objects.equals(response.body().get(i - 1).coin, "ENG")) {
-                            binding.engPrice.setText(String.valueOf(response.body().get(i - 1).price));
-                            binding.engPrice1.setText(String.valueOf(response.body().get(i - 1).price));
-                            binding.engName.setText(response.body().get(i - 1).coin + " - " + response.body().get(i - 1).name);
+                        if (Objects.equals(response.body().get(i - 1).getCoin(), "ANTPOOL BTC")) {
+                            binding.engPrice.setText(price);
+                            binding.engPrice1.setText(price);
+                            binding.engName.setText(coin_name);
                         }
                         i--;
-
                     }
+                    dismissProgress();
+                } else {
+                    showToast(getContext(), "Verileri çekerken bir hata oluştu");
+                    dismissProgress();
                 }
             }
 
             @Override
             public void onFailure(Call<List<CoinsModel>> call, Throwable t) {
-                Toast.makeText(getContext(),"Bir hata oluştu:"+t.getLocalizedMessage(),Toast.LENGTH_LONG).show();
+                dismissProgress();
+                showToast(getContext(), "Bir hata oluştu:" + t.getLocalizedMessage());
             }
         });
+    }
+
+    public String getFormatedPrice(Double price)
+    {
+        return "$" + formatter.format(price);
     }
     public final Context requireContext1() {
         Context context = getContext();

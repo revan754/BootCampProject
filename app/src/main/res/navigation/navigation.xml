@@ -8,7 +8,8 @@
     <fragment
         android:id="@+id/loginFragment"
         android:name="com.example.bootcampproject.view.LoginFragment"
-        android:label="LoginFragment" >
+        android:label="LoginFragment"
+        tools:layout="@layout/fragment_login">
         <action
             android:id="@+id/action_loginFragment_to_forgetPasswordFragment"
             app:destination="@id/forgetPasswordFragment" />
@@ -19,7 +20,8 @@
     <fragment
         android:id="@+id/forgetPasswordFragment"
         android:name="com.example.bootcampproject.view.ForgetPasswordFragment"
-        android:label="ForgetPasswordFragment" >
+        android:label="ForgetPasswordFragment"
+        tools:layout="@layout/fragment_forget_password" >
         <action
             android:id="@+id/action_forgetPasswordFragment_to_loginFragment"
             app:destination="@id/loginFragment" />

@@ -3,8 +3,6 @@ package com.example.bootcampproject.model;
 import com.google.gson.annotations.SerializedName;
 
 public class CoinsModel {
-
-
     @SerializedName("coin")
     public String coin;
 
@@ -54,5 +52,15 @@ public class CoinsModel {
 
     public void setVolume(double volume) {
         this.volume = volume;
+    }
+
+    @Override
+    public String toString() {
+        return "CoinsModel{" +
+                "coin='" + coin + '\'' +
+                ", name='" + name + '\'' +
+                ", price=" + price +
+                ", volume=" + volume +
+                '}';
     }
 }
